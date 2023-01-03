@@ -1,0 +1,23 @@
+syntax = "proto3";
+package api.user.v1;
+option go_package = "user/api/v1;v1";
+
+service User{
+  rpc CreateUser(CreateUserInfo) returns(UserInfoResponse);
+}
+
+message CreateUserInfo{
+  string nickName = 1;
+  string password = 2;
+  string mobile = 3;
+}
+
+message UserInfoResponse{
+  int64 id = 1;
+  string password = 2;
+  string mobile = 3;
+  string nickName = 4;
+  int64 birthday = 5;
+  string gender = 6;
+  int32 role = 7;
+}
