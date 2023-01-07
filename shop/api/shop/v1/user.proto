@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package api.shop.v1;
+
+option go_package = "shop/api/shop/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.shop.v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+service Shop{
+  rpc Register(RegisterReq)returns(RegisterReply){
+    option(google.api.http) = {
+      post:"/api/users/register",
+      body:"*",
+    };
+  }
+  rpc Login(LoginReq)returns(RegisterReply){
+    option(google.api.http) = {
+      post:"/api/users/login",
+      body:"*",
+    };
+  }
+  rpc Captcha(google.protobuf.Empty)returns(CaptchaReply){
+    option(google.api.http) = {
+      get:"/api/users/captcha",
+    };
+  }
+  rpc Detail(google.protobuf.Empty)returns(DetailReply){
+    option(google.api.http) = {
+      get:"/api/users/detail",
+    };
+  }
+}
+
+message RegisterReq{
+  string mobile = 1[(validate.rules).string.len = 11];
+  string username = 2 [(validate.rules).string = {min_len:3,max_len:15}];
+  string password = 3 [(validate.rules).string = {min_len:8}];
+}
+
+message RegisterReply{
+  int64 id = 1;
+  string mobile = 2;
+  string nickname = 3;
+  string token = 4;
+  int64 expiredAt = 5;
+}
+
+message LoginReq{
+  //  string mobile = 1 [(validate.rules).string.len = 11];
+  //  string password = 2 [(validate.rules).string = {min_len:8}];
+  //  string captcha = 3 [(validate.rules).string.len = 5];
+  //  string captchaId = 4 [(validate.rules).string = {min_len:1}];
+  string mobile = 1;
+  string password = 2;
+  string captcha = 3;
+  string captchaId = 4;
+}
+
+message CaptchaReply{
+  string captchaId = 1;
+  string picPath = 2;
+}
+
+message DetailReply{
+  int64 id = 1;
+  string mobile = 2;
+  string nickName = 3;
+  int64 birthday = 4;
+  string gender = 5;
+  int32 role = 6;
+}
